@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { getPetDetails } from '../../api/petfinder';
 import Hero from '../../components/hero';
-
+import { useParams, Redirect, useHistory } from 'react-router-dom';
 const PetDetailsPage = () => {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const id = '51322435'; // <--- Update me!
-
+  //const id = '51322435'; // <--- Update me!
+  const { type, id } = useParams();
   useEffect(() => {
     async function getPetsData() {
       try {
@@ -16,6 +16,7 @@ const PetDetailsPage = () => {
         setError(false);
       } catch (e) {
         setError(true);
+        return (<Redirect to='/PetDetailsNotFound' />);
       }
       setLoading(false);
     }
