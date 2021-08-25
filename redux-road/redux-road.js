@@ -29,7 +29,7 @@ const reducer = (state = initialWagonState, action) => {
             return state;
     }
 }
-
+//Calling reducer functions
 let wagon = reducer(undefined, {});
 console.log(wagon);
 wagon = reducer(wagon, { type: 'travel', payload: 1 });
