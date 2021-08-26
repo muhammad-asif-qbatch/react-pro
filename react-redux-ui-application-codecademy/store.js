@@ -5,57 +5,59 @@ import { createStore } from 'redux';
 // REDUX CODE
 ///////////////////////////////////
 
-const toggle = () => {
-    return { type: 'toggle' }
+const increment = () => {
+    return { type: 'increment' }
 }
 
-const initialState = 'off';
-const lightSwitchReducer = (state = initialState, action) => {
+const decrement = () => {
+    return { type: 'decrement' }
+}
+
+const initialState = 0;
+const counterReducer = (state = initialState, action) => {
     switch (action.type) {
-        case 'toggle':
-            return state === 'on' ? 'off' : 'on';
+        case 'increment':
+            return state + 1;
+        case 'decrement':
+            return state - 1;
         default:
             return state;
     }
 }
 
-const store = createStore(lightSwitchReducer);
+const store = createStore(counterReducer);
 
 // REACT CODE
 ///////////////////////////////////
 
-// Pass the store's current state as a prop to the LightSwitch component.
 const render = () => {
     ReactDOM.render(
-        <LightSwitch
+        <CounterApp
             state={store.getState()}
         />,
         document.getElementById('root')
     )
 }
+render();
+store.subscribe(render);
 
-render(); // Execute once to render with the initial state.
-store.subscribe(render); // Re-render in response to state changes.
+function CounterApp(props) {
 
-// Receive the store's state as a prop.
-function LightSwitch(props) {
     const state = props.state;
 
-    // Adjust the UI based on the store's current state.
-    const bgColor = state === 'on' ? 'white' : 'black';
-    const textColor = state === 'on' ? 'black' : 'white';
+    const onIncrementButtonClicked = () => {
+        store.dispatch(increment());
+    }
 
-    // The click handler dispatches an action to the store.
-    const handleLightSwitchClick = () => {
-        store.dispatch(toggle());
+    const onDecrementButtonClicked = () => {
+        store.dispatch(decrement());
     }
 
     return (
-        <div style={{ background: bgColor, color: textColor }}>
-            <button onClick={handleLightSwitchClick}>
-                {state}
-            </button>
+        <div>
+            <h1> {state} </h1>
+            <button onClick={onIncrementButtonClicked}>+</button>
+            <button onClick={onDecrementButtonClicked}>-</button>
         </div>
     )
 }
-
